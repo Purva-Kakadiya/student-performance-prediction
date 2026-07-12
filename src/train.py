@@ -1,9 +1,21 @@
 # src/train.py
 
-from preprocessing import prepare_data
+import pickle
+
+from preprocessing import (
+    load_dataset,
+    split_features_target
+)
+
+from sklearn.compose import ColumnTransformer
+
+from sklearn.pipeline import Pipeline
+
+from sklearn.preprocessing import OneHotEncoder
+
+from sklearn.ensemble import RandomForestRegressor
 
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
 
 from sklearn.metrics import (
     mean_absolute_error,
@@ -11,14 +23,73 @@ from sklearn.metrics import (
     r2_score
 )
 
-import pickle
+import pandas as pd
 import numpy as np
 
+# ----------------------------
+# Load Dataset
+# ----------------------------
 
-# Load data
-X, y = prepare_data("../data/student-mat.csv")
+df = pd.read_csv("../data/student-mat.csv", sep=";")
 
-# Split data
+print(df.columns.tolist())
+print(df.head())
+
+X, y = split_features_target(df)
+
+# ----------------------------
+# Find categorical columns
+# ----------------------------
+
+categorical_columns = X.select_dtypes(
+    include=["object"]
+).columns
+
+numeric_columns = X.select_dtypes(
+    exclude=["object"]
+).columns
+
+# ----------------------------
+# Preprocessing
+# ----------------------------
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        (
+            "cat",
+            OneHotEncoder(handle_unknown="ignore"),
+            categorical_columns
+        ),
+        (
+            "num",
+            "passthrough",
+            numeric_columns
+        )
+    ]
+)
+
+# ----------------------------
+# Pipeline
+# ----------------------------
+
+pipeline = Pipeline([
+    (
+        "preprocessor",
+        preprocessor
+    ),
+    (
+        "model",
+        RandomForestRegressor(
+            random_state=42,
+            n_estimators=200
+        )
+    )
+])
+
+# ----------------------------
+# Split
+# ----------------------------
+
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -26,24 +97,74 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-# Create model
-rf = RandomForestRegressor(
-    random_state=42
+# ----------------------------
+# Train
+# ----------------------------
+
+pipeline.fit(
+    X_train,
+    y_train
 )
 
-# Train model
-rf.fit(X_train, y_train)
+# ----------------------------
+# Predict
+# ----------------------------
 
-# Predictions
-predictions = rf.predict(X_test)
+predictions = pipeline.predict(
+    X_test
+)
 
+# ----------------------------
 # Evaluation
-print("MAE:", mean_absolute_error(y_test, predictions))
-print("RMSE:", np.sqrt(mean_squared_error(y_test, predictions)))
-print("R2 Score:", r2_score(y_test, predictions))
+# ----------------------------
 
-# Save model
-with open("../models/student_model.pkl", "wb") as file:
-    pickle.dump(rf, file)
+mae = mean_absolute_error(
+    y_test,
+    predictions
+)
 
-print("Model saved successfully.")
+rmse = np.sqrt(
+    mean_squared_error(
+        y_test,
+        predictions
+    )
+)
+
+r2 = r2_score(
+    y_test,
+    predictions
+)
+
+print()
+
+print("=" * 40)
+
+print("MODEL PERFORMANCE")
+
+print("=" * 40)
+
+print(f"MAE  : {mae:.2f}")
+
+print(f"RMSE : {rmse:.2f}")
+
+print(f"R2   : {r2:.4f}")
+
+print("=" * 40)
+
+# ----------------------------
+# Save Pipeline
+# ----------------------------
+
+with open(
+    "../models/student_pipeline.pkl",
+    "wb"
+) as file:
+
+    pickle.dump(
+        pipeline,
+        file
+    )
+
+print()
+
+print("Pipeline saved successfully!")

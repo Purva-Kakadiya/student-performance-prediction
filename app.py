@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+import pandas as pd
 
 with open("models/student_model.pkl", "rb") as file:
     model = pickle.load(file)
