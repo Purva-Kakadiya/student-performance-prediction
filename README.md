@@ -18,13 +18,6 @@ School absences
 
 This project uses a Random Forest Regressor to estimate the student's final grade (G3).
 
-🚀 Features
-Data preprocessing using Scikit-learn Pipeline
-OneHotEncoder for categorical features
-Random Forest Regression model
-Model evaluation using MAE, RMSE, and R² Score
-Interactive Streamlit web application
-Predicts student final grade based on user input
 🛠 Technologies Used
 Python
 Pandas
@@ -34,25 +27,7 @@ Streamlit
 Pickle
 Git
 GitHub
-📂 Project Structure
-student-performance-prediction/
-│
-├── app.py
-├── data/
-│   └── student-mat.csv
-│
-├── models/
-│   └── student_pipeline.pkl
-│
-├── notebooks/
-│   └── Student_Performance.ipynb
-│
-├── src/
-│   └── train.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
+
 📊 Selected Features
 
 The final model uses the following features:
@@ -68,49 +43,8 @@ Higher Education Aspiration
 Family Relationship
 Absences
 
-Target Variable:
-
-G3 (Final Grade)
-⚙️ Machine Learning Pipeline
-
-Dataset
-
-    ↓
-
-Feature Selection
-
-    ↓
-
-Preprocessing
-
-    ↓
-
-OneHotEncoder
-
-    ↓
-
-Random Forest Regressor
-
-    ↓
-
-Model Evaluation
-
-    ↓
-
-Pipeline Saved
-
-    ↓
-
-Streamlit Application
-
 📈 Model Evaluation
 
-Replace these values with your actual results after training.
-
-Metric	Value
-MAE	XX.XX
-RMSE	XX.XX
-R² Score	XX.XX
 ▶️ Installation
 
 Clone the repository
@@ -157,10 +91,6 @@ streamlit run app.py
 
 The application will open automatically in your browser.
 
-📷 Application Screenshot
-
-Add screenshots of your application here after completing the project.
-
 Example:
 
 Home Page
@@ -172,6 +102,7 @@ Feature importance visualization
 Deploy online
 Improve UI design
 Compare multiple regression algorithms
+
 👨‍💻 Author
 
 Kakadiya Purva
