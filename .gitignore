@@ -1,18 +1,36 @@
-# Virtual Environment
+pycache/
+*.py[cod]
+*$py.class
+
+Compiled Python files
+
+*.so
+
 venv/
+.venv/
+env/
+ENV/
 
-# Python cache
-__pycache__/
-*.pyc
-
-# Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# VS Code settings
 .vscode/
 
-# macOS
+.idea/
+
 .DS_Store
 
-# Windows
 Thumbs.db
+Desktop.ini
+
+.env
+
+build/
+dist/
+
+*.egg-info/
+
+*.log
+
+.streamlit/
+
+# models/
